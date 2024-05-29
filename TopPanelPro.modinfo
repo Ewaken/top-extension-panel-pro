@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="9E881F4F-017F-29F5-D849-04537424BE3F" version="20240130">
+	<Properties>
+		<Name>LOC_TPE_NAME</Name>
+		<Description>LOC_TPE_DESCRIPTION</Description>
+		<Teaser>LOC_TPE_TEASER</Teaser>
+		<Authors>[COLOR:ResGoldLabelCS]号码菌[ENDCOLOR]</Authors>
+		<SpecialThanks></SpecialThanks>
+		<AffectsSavedGames>0</AffectsSavedGames>
+		<CompatibleVersions>1.2,2.0</CompatibleVersions>
+	</Properties>
+
+	<LocalizedText>
+		<Text id="LOC_TPE_NAME">
+			<en_US>[ENDCOLOR]TopPanel Extension [COLOR:ResGoldLabelCS]Pro[ENDCOLOR]</en_US>
+			<zh_Hans_CN>[ENDCOLOR]Team PVP [COLOR:ResGoldLabelCS]顶部面板拓展[ENDCOLOR]</zh_Hans_CN>
+		</Text>
+		<Text id="LOC_TPE_DESCRIPTION">
+			<en_US>[icon_You]Add indicators for Food, Production, Population, and Luxury Resources to the Top Panel.</en_US>
+			<zh_Hans_CN>[icon_You]新增顶栏额外内容：食物、生产力、人口、奢侈品。</zh_Hans_CN>
+		</Text>
+		<Text id="LOC_TPE_TEASER">
+			<en_US>TopPanel Extension Pro</en_US>
+			<zh_Hans_CN>顶部面板扩展</zh_Hans_CN>
+		</Text>			
+	</LocalizedText>
+
+	<InGameActions>
+		<!--顶部面板扩展(TPE)-->
+		<UpdateText id="UpdateText">
+			<File>TPE/TopPanel_Text.xml</File>
+		</UpdateText>
+		<ReplaceUIScript id="TopPanel">
+            <Properties>
+                <LoadOrder>10000</LoadOrder>
+                <LuaContext>TopPanel</LuaContext>
+                <LuaReplace>TPE/UI/TopPanelExtension.lua</LuaReplace>
+            </Properties>
+		</ReplaceUIScript>	
+		<ImportFiles id="ImportFiles">
+		    <Properties>
+                <LoadOrder>10010</LoadOrder>
+            </Properties>
+			<File>TPE/UI/TopPanelExtension.lua</File>
+		</ImportFiles>
+		<AddUserInterfaces id="TopPanel_TT">
+			<Properties>
+				<LoadOrder>10020</LoadOrder>
+				<Context>InGame</Context>
+			</Properties>
+			<File>TPE/UI/TopPanel_TT.xml</File>
+		</AddUserInterfaces>		
+	</InGameActions>
+    <Files>
+		<File>TPE/TopPanel_Text.xml</File>
+		<File>TPE/UI/TopPanelExtension.lua</File>
+		<File>TPE/UI/TopPanel_TT.lua</File>
+		<File>TPE/UI/TopPanel_TT.xml</File>
+	</Files>
+</Mod>
