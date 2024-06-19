@@ -307,7 +307,9 @@ function RefreshLuxuryResourcesType()
 	end
 	-- 队友额外奢侈品
 	local LUXURYtext = Locale.Lookup("LOC_TOP_PANEL_TEAM_MORE_LUXURY_NAME")
+	local LUXURYWorldtext = Locale.Lookup("LOC_TOP_PANEL_WORLD_MORE_LUXURY_NAME")
 	local TeamMore = false
+	local WorldMore = false
 	
 	for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
 		if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then		-- 是队友
@@ -317,10 +319,22 @@ function RefreshLuxuryResourcesType()
 				LUXURYtext = LUXURYtext..LUXURYstr
 			end
 		end
+		if Players[Game.GetLocalPlayer()]:GetTeam() ~= Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then
+			local LUXURYstr = GetMoreLUXURYstr(playerID)
+			if	LUXURYstr then
+				WorldMore = true
+				LUXURYWorldtext = LUXURYWorldtext..LUXURYstr
+			end
+		end
 	end
 	
 	if TeamMore == true and isLuxuriesTradingAllowed == true then
 		sToolTopText = sToolTopText..LUXURYtext
+		sYieldPerTurnText = sYieldPerTurnText.."[icon_PressureHigh]"
+	end
+
+	if WorldMore == true and isLuxuriesTradingAllowed == true then
+		sToolTopText = sToolTopText..LUXURYWorldtext
 		sYieldPerTurnText = sYieldPerTurnText.."[icon_PressureHigh]"
 	end
 
@@ -505,7 +519,10 @@ if BaseFile == "TopPanel_Expansion2" then
 					end
 	-------------------------------------------------------------
 					local TeamStrategicYtext = Locale.Lookup("LOC_TOP_PANEL_TEAM_MORE_STRATEGIC_NAME")
+					local WorldStrategicYtext = Locale.Lookup("LOC_TOP_PANEL_WORLD_MORE_STRATEGIC_NAME")
 					local TeamMore = false
+					local WorldMore = false
+
 					for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
 						if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then		-- 是队友
 							local Strategicstr = GetMoreStrategicstr(playerID,resource)
@@ -514,10 +531,22 @@ if BaseFile == "TopPanel_Expansion2" then
 								TeamStrategicYtext = TeamStrategicYtext..Strategicstr
 							end
 						end
+
+						if Players[Game.GetLocalPlayer()]:GetTeam() ~= Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then
+							local Strategicstr = GetMoreStrategicstr(playerID,resource)
+							if	Strategicstr ~= 0 then
+								WorldMore = true
+								WorldStrategicYtext = WorldStrategicYtext..Strategicstr
+							end
+						end
 					end
 					
 					if TeamMore == true and isStrategicsTradingAllowed == true then
 						tooltip = tooltip .. "[NEWLINE]" .. TeamStrategicYtext
+					end
+
+					if WorldMore == true and isStrategicsTradingAllowed == true then
+						tooltip = tooltip .. "[NEWLINE]" .. WorldStrategicYtext
 					end
 	------------------------------------
 					if (stockpileAmount > 0 or totalAccumulationPerTurn > 0 or totalConsumptionPerTurn > 0 or g_TeamVisibleResources[resource.Index]) then		-- 当解锁时显示

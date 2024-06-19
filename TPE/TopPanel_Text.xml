@@ -26,7 +26,13 @@
 			<Text>[NEWLINE][NEWLINE]Team Extra Luxury Resources</Text>
 		</Replace>
 		<Replace Tag="LOC_TOP_PANEL_TEAM_MORE_LUXURY_NAME" Language="fr_FR">
-			<Text>[NEWLINE][NEWLINE]Ressources de luxes de mes coéquipiers en trop</Text>
+			<Text>[NEWLINE][NEWLINE]Ressources de luxes de mes coéquipiers en surplus</Text>
+		</Replace>
+		<Replace Tag="LOC_TOP_PANEL_WORLD_MORE_LUXURY_NAME" Language="en_US">
+			<Text>[NEWLINE][NEWLINE]World Extra Luxury Resources</Text>
+		</Replace>
+		<Replace Tag="LOC_TOP_PANEL_WORLD_MORE_LUXURY_NAME" Language="fr_FR">
+			<Text>[NEWLINE][NEWLINE]Ressources de luxes en surplus chez les autres joueurs</Text>
 		</Replace>
 		<Replace Tag="LOC_TOP_PANEL_TEAM_MORE_STRATEGIC_NAME" Language="zh_Hans_CN">
 			<Text>[NEWLINE]队友可用的战略[NEWLINE]</Text>
@@ -35,7 +41,13 @@
 			<Text>[NEWLINE][NEWLINE]Team Extra Strategic Resources</Text>
 		</Replace>
 		<Replace Tag="LOC_TOP_PANEL_TEAM_MORE_STRATEGIC_NAME" Language="fr_FR">
-			<Text>[NEWLINE][NEWLINE]Ressources stratégiques de mes coéquipiers en trop</Text>
+			<Text>[NEWLINE][NEWLINE]Ressources stratégiques de mes coéquipiers en surplus</Text>
+		</Replace>
+		<Replace Tag="LOC_TOP_PANEL_WORLD_MORE_STRATEGIC_NAME" Language="en_US">
+			<Text>[NEWLINE][NEWLINE]World Extra Strategic Resources</Text>
+		</Replace>
+		<Replace Tag="LOC_TOP_PANEL_WORLD_MORE_STRATEGIC_NAME" Language="fr_FR">
+			<Text>[NEWLINE][NEWLINE]Ressources stratégiques en surplus chez les autres joueurs</Text>
 		</Replace>
 		<Replace Tag="LOC_TOPPANEL_PRODUCTION_TOOLTIP_HEADER" Language="zh_Hans_CN">
 			<Text>+{1_Num} [Icon_ProductionLarge] 生产力</Text>
@@ -53,7 +65,7 @@
 			<Text>Total Production of the Empire</Text>
 		</Replace>
 		<Replace Tag="LOC_TOPPANEL_PRODUCTION_TOOLTIP_DESC" Language="fr_FR">
-			<Text>Production totale de mon Empire</Text>
+			<Text>Production globale dans mon Empire</Text>
 		</Replace>
 		<Replace Tag="LOC_TOPPANEL_PRODUCTION_TOOLTIP_REPORTS" Language="zh_Hans_CN">
 			<Text>生产力成长曲线</Text>
@@ -80,7 +92,7 @@
 			<Text>Total Food of the Empire</Text>
 		</Replace>
 		<Replace Tag="LOC_TOPPANEL_FOOD_TOOLTIP_DESC" Language="fr_FR">
-			<Text>Nourriture totale dans mon Empire</Text>
+			<Text>Nourriture globale dans mon Empire</Text>
 		</Replace>
 		<Replace Tag="LOC_TOPPANEL_POPULATION_TOOLTIP_HEADER" Language="zh_Hans_CN">
 			<Text>{1_Num} [Icon_Citizen] 人口</Text>
