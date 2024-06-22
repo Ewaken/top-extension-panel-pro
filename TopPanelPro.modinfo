@@ -18,7 +18,7 @@
 		</Text>
 		<Text id="LOC_TPE_DESCRIPTION">
 			<en_US>[icon_You]Add indicators for Food, Production, Population, and Luxury Resources to the Top Panel.</en_US>
-			<fr_FR>[icon_You]Ajoute des indicateurs pour la Nourriture, la Production, la Population, and les ressources de luxes dans le panneau du haut.</fr_FR>
+			<fr_FR>[icon_You]Ajoute des indicateurs pour la nourriture, la production, la population et les ressources de luxe sur le panneau supérieur.</fr_FR>
 			<zh_Hans_CN>[icon_You]新增顶栏额外内容：食物、生产力、人口、奢侈品。</zh_Hans_CN>
 		</Text>
 		<Text id="LOC_TPE_TEASER">

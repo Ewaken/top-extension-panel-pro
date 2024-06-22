@@ -310,17 +310,23 @@ function RefreshLuxuryResourcesType()
 	local LUXURYWorldtext = Locale.Lookup("LOC_TOP_PANEL_WORLD_MORE_LUXURY_NAME")
 	local TeamMore = false
 	local WorldMore = false
+	local localPlayerId = Game.GetLocalPlayer()
+	local localTeam = Players[localPlayerId]:GetTeam()
+	local localPlayerDiplomacy = localPlayerId:GetDiplomacy()
 	
-	for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
-		if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then		-- 是队友
-			local LUXURYstr = GetMoreLUXURYstr(playerID)
+	for j, playerId in ipairs(PlayerManager.GetAliveMajorIDs()) do
+		local playerTeam = Players[playerId]:GetTeam()
+
+		if localTeam == playerTeam and localPlayerId ~= playerId then		-- 是队友
+			local LUXURYstr = GetMoreLUXURYstr(playerId)
 			if	LUXURYstr then
 				TeamMore = true
 				LUXURYtext = LUXURYtext..LUXURYstr
 			end
 		end
-		if Players[Game.GetLocalPlayer()]:GetTeam() ~= Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then
-			local LUXURYstr = GetMoreLUXURYstr(playerID)
+
+		if localTeam ~= playerTeam and localPlayerId ~= playerId and localPlayerDiplomacy:IsAtWarWith( playerId ) == false then
+			local LUXURYstr = GetMoreLUXURYstr(playerId)
 			if	LUXURYstr then
 				WorldMore = true
 				LUXURYWorldtext = LUXURYWorldtext..LUXURYstr
@@ -330,11 +336,13 @@ function RefreshLuxuryResourcesType()
 	
 	if TeamMore == true and isLuxuriesTradingAllowed == true then
 		sToolTopText = sToolTopText..LUXURYtext
-		sYieldPerTurnText = sYieldPerTurnText.."[icon_PressureHigh]"
 	end
 
 	if WorldMore == true and isLuxuriesTradingAllowed == true then
 		sToolTopText = sToolTopText..LUXURYWorldtext
+	end
+
+	if ((TeamMore == true or WorldMore == true) and isLuxuriesTradingAllowed == true) then
 		sYieldPerTurnText = sYieldPerTurnText.."[icon_PressureHigh]"
 	end
 
@@ -350,7 +358,6 @@ end
 -- ===========================================================================
 function GetMoreLUXURYstr(playerID)
 
-	local pPlayerConfig = PlayerConfigurations[playerID];
 	local leaderType = PlayerConfigurations[playerID]:GetLeaderTypeName();
 	local LeaderName = Locale.Lookup(GameInfo.Leaders[leaderType].Name);
 
@@ -395,8 +402,9 @@ end
 -- ===========================================================================
 function IsTradableResources(Resource)
 	local localPlayerID = Game.GetLocalPlayer()
+	local localPlayerTeam = Players[localPlayerID]:GetTeam()
 	for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
-		if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then		-- 是队友
+		if  localPlayerTeam == Players[playerID]:GetTeam() and localPlayerID ~= playerID then		-- 是队友
 			local pForDeal			:table = DealManager.GetWorkingDeal(DealDirection.OUTGOING, localPlayerID, playerID);
 			local possibleResources	:table = DealManager.GetPossibleDealItems(localPlayerID, playerID, DealItemTypes.RESOURCES, pForDeal);
 				if (possibleResources ~= nil) then
@@ -522,9 +530,11 @@ if BaseFile == "TopPanel_Expansion2" then
 					local WorldStrategicYtext = Locale.Lookup("LOC_TOP_PANEL_WORLD_MORE_STRATEGIC_NAME")
 					local TeamMore = false
 					local WorldMore = false
+					local localPlayerTeam = Players[localPlayerID]:GetTeam()
 
 					for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
-						if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then		-- 是队友
+						local playerTeam = Players[playerID]:GetTeam()
+						if localPlayerTeam == playerTeam and localPlayerID ~= playerID then		-- 是队友
 							local Strategicstr = GetMoreStrategicstr(playerID,resource)
 							if	Strategicstr ~= 0 then
 								TeamMore = true
@@ -532,7 +542,7 @@ if BaseFile == "TopPanel_Expansion2" then
 							end
 						end
 
-						if Players[Game.GetLocalPlayer()]:GetTeam() ~= Players[playerID]:GetTeam() and Game.GetLocalPlayer() ~= playerID then
+						if localPlayerTeam ~= playerTeam and localPlayerID ~= playerID then
 							local Strategicstr = GetMoreStrategicstr(playerID,resource)
 							if	Strategicstr ~= 0 then
 								WorldMore = true
@@ -626,7 +636,8 @@ end
 --	判断队友是否解锁了资源
 -- ===========================================================================
 function GetTeamVisibleResources(playerID)
-	if Players[Game.GetLocalPlayer()]:GetTeam() == Players[playerID]:GetTeam() or playerID == Game.GetLocalPlayer() then		-- 是队友
+	local localPlayerId = Game.GetLocalPlayer()
+	if Players[localPlayerId]:GetTeam() == Players[playerID]:GetTeam() or playerID == localPlayerId then		-- 是队友
 		local pPlayerResources = Players[playerID]:GetResources();
 		for i, kdate in ipairs(g_TopPanelResources) do
 			if pPlayerResources:IsResourceVisible(kdate.Hash) then
