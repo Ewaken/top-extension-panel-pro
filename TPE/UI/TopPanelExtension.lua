@@ -269,7 +269,9 @@ function RefreshLuxuryResourcesType()
 	local pLuxuryTotalType = 0
 	local More = false
 	
-	local pPlayerResources = Players[Game.GetLocalPlayer()]:GetResources()	
+	local localPlayerId = Game.GetLocalPlayer()
+	local localPlayer = Players[localPlayerId]
+	local pPlayerResources = localPlayer:GetResources()	
 	
 	for resource in GameInfo.Resources() do
 		if resource.ResourceClassType ~= nil and resource.ResourceClassType == "RESOURCECLASS_LUXURY" then
@@ -280,13 +282,11 @@ function RefreshLuxuryResourcesType()
 				pLuxuryTotalAmount = pLuxuryTotalAmount + amount
 				pLuxuryTotalType = pLuxuryTotalType + 1
 				table.insert(g_LocalplayerLuxury,resource.ResourceType)		-- 将已有奢侈写入表			
-				if (amount > 1) then
-					if	IsTradableResources(resource) then
-						More = true
-						local Moreamount = amount - 1
-						local MoreaddLuxuryResourceText = "[NEWLINE][ICON_"..resource.ResourceType.."] "..Locale.Lookup(resource.Name).." "..Moreamount
-						Morestr = Morestr..MoreaddLuxuryResourceText
-					end
+				if (amount > 1 and IsTradableResources(resource)) then
+					More = true
+					local Moreamount = amount - 1
+					local MoreaddLuxuryResourceText = "[NEWLINE][ICON_"..resource.ResourceType.."] "..Locale.Lookup(resource.Name).." "..Moreamount
+					Morestr = Morestr..MoreaddLuxuryResourceText
 				end
 			end
 		end
@@ -310,9 +310,9 @@ function RefreshLuxuryResourcesType()
 	local LUXURYWorldtext = Locale.Lookup("LOC_TOP_PANEL_WORLD_MORE_LUXURY_NAME")
 	local TeamMore = false
 	local WorldMore = false
-	local localPlayerId = Game.GetLocalPlayer()
-	local localTeam = Players[localPlayerId]:GetTeam()
-	local localPlayerDiplomacy = localPlayerId:GetDiplomacy()
+	
+	local localTeam = localPlayer:GetTeam()
+	local localPlayerDiplomacy = localPlayer:GetDiplomacy()
 	
 	for j, playerId in ipairs(PlayerManager.GetAliveMajorIDs()) do
 		local playerTeam = Players[playerId]:GetTeam()
@@ -325,7 +325,7 @@ function RefreshLuxuryResourcesType()
 			end
 		end
 
-		if localTeam ~= playerTeam and localPlayerId ~= playerId and localPlayerDiplomacy:IsAtWarWith( playerId ) == false then
+		if localTeam ~= playerTeam and localPlayerId ~= playerId and localPlayerDiplomacy:HasMet( playerId ) == true and localPlayerDiplomacy:IsAtWarWith( playerId ) == false then
 			local LUXURYstr = GetMoreLUXURYstr(playerId)
 			if	LUXURYstr then
 				WorldMore = true
@@ -402,11 +402,12 @@ end
 -- ===========================================================================
 function IsTradableResources(Resource)
 	local localPlayerID = Game.GetLocalPlayer()
-	local localPlayerTeam = Players[localPlayerID]:GetTeam()
-	for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
-		if  localPlayerTeam == Players[playerID]:GetTeam() and localPlayerID ~= playerID then		-- 是队友
-			local pForDeal			:table = DealManager.GetWorkingDeal(DealDirection.OUTGOING, localPlayerID, playerID);
-			local possibleResources	:table = DealManager.GetPossibleDealItems(localPlayerID, playerID, DealItemTypes.RESOURCES, pForDeal);
+	local localPlayerDiplomacy = Players[localPlayerID]:GetDiplomacy()
+	
+	for j, playerId in ipairs(PlayerManager.GetAliveMajorIDs()) do
+		if  localPlayerID ~= playerId and localPlayerDiplomacy:HasMet( playerId ) == true and localPlayerDiplomacy:IsAtWarWith( playerId ) == false then		-- 是队友
+			local pForDeal			:table = DealManager.GetWorkingDeal(DealDirection.OUTGOING, localPlayerID, playerId);
+			local possibleResources	:table = DealManager.GetPossibleDealItems(localPlayerID, playerId, DealItemTypes.RESOURCES, pForDeal);
 				if (possibleResources ~= nil) then
 					for i, entry in ipairs(possibleResources) do
 						local resourceDesc : table = GameInfo.Resources[entry.ForType];
@@ -450,6 +451,7 @@ if BaseFile == "TopPanel_Expansion2" then
 		end
 		local localPlayerID = Game.GetLocalPlayer();
 		local localPlayer = Players[localPlayerID];
+		local localPlayerDiplomacy = localPlayer:GetDiplomacy()
 		if (localPlayerID ~= -1) then
 			m_kResourceIM:ResetInstances(); 
 			local pPlayerResources:table	=  localPlayer:GetResources();
@@ -532,18 +534,18 @@ if BaseFile == "TopPanel_Expansion2" then
 					local WorldMore = false
 					local localPlayerTeam = Players[localPlayerID]:GetTeam()
 
-					for j, playerID in ipairs(PlayerManager.GetAliveMajorIDs()) do
-						local playerTeam = Players[playerID]:GetTeam()
-						if localPlayerTeam == playerTeam and localPlayerID ~= playerID then		-- 是队友
-							local Strategicstr = GetMoreStrategicstr(playerID,resource)
+					for j, playerId in ipairs(PlayerManager.GetAliveMajorIDs()) do
+						local playerTeam = Players[playerId]:GetTeam()
+						if localPlayerTeam == playerTeam and localPlayerID ~= playerId then		-- 是队友
+							local Strategicstr = GetMoreStrategicstr(playerId,resource)
 							if	Strategicstr ~= 0 then
 								TeamMore = true
 								TeamStrategicYtext = TeamStrategicYtext..Strategicstr
 							end
 						end
 
-						if localPlayerTeam ~= playerTeam and localPlayerID ~= playerID then
-							local Strategicstr = GetMoreStrategicstr(playerID,resource)
+						if localPlayerTeam ~= playerTeam and localPlayerID ~= playerId and localPlayerDiplomacy:HasMet( playerId ) == true and localPlayerDiplomacy:IsAtWarWith( playerId ) == false then
+							local Strategicstr = GetMoreStrategicstr(playerId,resource)
 							if	Strategicstr ~= 0 then
 								WorldMore = true
 								WorldStrategicYtext = WorldStrategicYtext..Strategicstr
